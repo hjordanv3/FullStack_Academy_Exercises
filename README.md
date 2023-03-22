@@ -1,2 +1,2 @@
-# FullStack_Academy_Exercises
- Test
+# FullStack Academy Exercises
+ Repository containing FullStack Academy pair programming exercises and projects
