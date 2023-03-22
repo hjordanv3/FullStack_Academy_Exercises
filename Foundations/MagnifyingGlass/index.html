@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Text Size Adjuster</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		p {
+			font-size: 24px;
+			margin: 0;
+			padding: 20px;
+			text-align: center;
+		}
+		
+		button {
+			font-size: 16px;
+			padding: 10px;
+			margin: 10px;
+			border: none;
+			background-color: #0095DD;
+			color: white;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+		
+		button:hover {
+			background-color: #0080C0;
+		}
+	</style>
+</head>
+<body>
+	<p id="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id diam eu mi rutrum faucibus. Aliquam at justo eu nulla ornare venenatis. Maecenas rhoncus nisi elit, sed ultrices turpis laoreet vitae. Nulla facilisi. Praesent vel sagittis ipsum.</p>
+	<button id="increase">Increase text size</button>
+	<button id="decrease">Decrease text size</button>
+	<script src="index.js"></script>
+</body>
+</html>

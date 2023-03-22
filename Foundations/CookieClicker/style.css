@@ -1,0 +1,17 @@
+#cookie-container {
+    text-align: center;
+  }
+  
+  #cookie {
+    width: 200px;
+    height: 200px;
+    margin: 50px auto;
+  }
+  
+  #clicks {
+    font-size: 24px;
+  }
+  
+.h1c {
+    text-align: center;
+}
