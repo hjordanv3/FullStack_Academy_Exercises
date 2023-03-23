@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Guessing Game</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <h1>Guessing Game!</h1>
+    <p>Guess a number between 1 and 100:</p>
+    <input type="text" id="guessInput">
+    <button onclick="checkGuess()">Guess</button>
+    <div id="result"></div>
+    <div id="guesses">
+      <h2>Previous Guesses:</h2>
+      <ul id="guessList"></ul>
+    </div>
+    <button onclick="resetGame()">Reset Game</button>
+    <button onclick="getHint()">Need a hint?</button>
+    <script src="index.js"></script>
+  </body>
+</html>
