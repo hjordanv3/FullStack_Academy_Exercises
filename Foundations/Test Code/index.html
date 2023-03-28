@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monster Battle</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="battle-container">
+    <div class="monster-container player">
+      <h2 class="monster-name"></h2>
+      <div class="hp-bar">
+        <div class="hp-bar-progress"></div>
+        <span class="hp-bar-value"></span>
+      </div>
+      <div class="buttons-container">
+        <button class="move-button"></button>
+        <button class="move-button"></button>
+        <button class="move-button"></button>
+      </div>
+      <img class="monster-image" src="">
+    </div>
+    <div class="monster-container opponent">
+      <h2 class="monster-name"></h2>
+      <div class="hp-bar">
+        <div class="hp-bar-progress"></div>
+        <span class="hp-bar-value"></span>
+      </div>
+      <img class="monster-image" src="">
+    </div>
+  </div>
+  <button id="attack-button">Attack!</button>
+
+  <script src="moves.js"></script>
+  <script src="monsters.js"></script>
+  <script src="battle.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
