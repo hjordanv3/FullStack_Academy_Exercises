@@ -1,8 +1,4 @@
-# I knew you'd need my help.
+# Please help me I don't know what I'm doing
 
+![monkey-reading_650x400_41470735507](https://user-images.githubusercontent.com/111809137/230444470-13738c9d-da19-48c2-8957-ec649e01210b.jpeg)
 
-
-You could not live with your own failure, and where did that bring you? Back to me.
-
-
-![thanos](https://user-images.githubusercontent.com/111809137/227037657-2e64d45d-55cd-4543-9d9d-f7c0a123feb7.jpeg)
