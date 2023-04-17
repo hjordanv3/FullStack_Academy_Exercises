@@ -8,5 +8,3 @@ The backend team has got our API up, the library data is flowing, and a sample o
 This assessment will test your ability to design classes that show a solid understanding of OOP best practices and build a small project given high level descriptions.
 
 Refer to Canvas for more information as well as the rubric.
-
-extra text for push

@@ -1,83 +1,158 @@
-// Define the Book class
+// Create UI elements for search and sorting
+const searchForm = document.createElement('form');
+searchForm.innerHTML = `
+ <input type="text" placeholder="Search" name="query">
+ <button type="submit">Search</button>`;
+
+const sortBySelect = document.createElement('select');
+sortBySelect.innerHTML = `
+ <option value="">Sort by...</option>
+ <option value="title">Title</option>
+ <option value="author">Author</option>
+`;
+
+const sortOrderToggle = document.createElement('button');
+sortOrderToggle.innerText = 'Toggle Sort Order (Ascending/Descending)';
+sortOrderToggle.dataset.ascending = 'true';
+
+// Append UI elements to the document body
+document.body.appendChild(searchForm);
+document.body.appendChild(sortBySelect);
+document.body.appendChild(sortOrderToggle);
+
+// Event listeners
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const query = event.target.query.value;
+  const searchResults = bookshelf.search(query);
+  const existingBookshelf = document.querySelector('.bookshelf');
+  document.body.replaceChild(bookshelf.render(searchResults), existingBookshelf);
+});
+
+sortBySelect.addEventListener('change', () => {
+ const sortBy = sortBySelect.value;
+ let ascending = sortOrderToggle.getAttribute('data-ascending') !== 'false';
+ const sortedBooks = bookshelf.sortBooks(sortBy, ascending);
+ const existingBookshelf = document.querySelector('.bookshelf');
+ document.body.replaceChild(bookshelf.render(sortedBooks), existingBookshelf);
+});
+
+sortOrderToggle.addEventListener('click', () => {
+  const ascending = sortOrderToggle.dataset.ascending === 'true';
+  sortOrderToggle.dataset.ascending = !ascending;
+  const sortBy = sortBySelect.value;
+  const sortedBooks = bookshelf.sortBooks(sortBy, !ascending);
+  const existingBookshelf = document.querySelector('.bookshelf');
+  document.body.replaceChild(bookshelf.render(sortedBooks), existingBookshelf);
+ });
+ 
+ // Define the Book class
 class Book {
   constructor(title, author) {
-  // Initialize the title and author properties of a book object
-  this.title = title;
-  this.author = author;
+    this.title = title;
+    this.author = author;
+    this.isFavorite = false;
+    this.comments = [];
   }
+
+  toggleFavorite() {
+    this.isFavorite = !this.isFavorite;
+  }
+
   // Render the book as a DOM element
   render() {
-      // Create a div element to represent the book
-      const bookElement = document.createElement('div');
-      // Add the 'book' class to the book element
-      bookElement.classList.add('book');
-  
-      // Create a h2 element to hold the book title
-      const titleElement = document.createElement('h2');
-      titleElement.innerText = this.title;
-      bookElement.appendChild(titleElement);
-  
-      // Create a p element to hold the book author
-      const authorElement = document.createElement('p');
-      authorElement.innerText = `By ${this.author}`;
-      bookElement.appendChild(authorElement);
-  
-      // Return the book element
-      return bookElement;
-    }
+    const bookElement = document.createElement('div');
+    bookElement.classList.add('book');
+
+    const titleElement = document.createElement('h2');
+    titleElement.innerText = this.title;
+    bookElement.appendChild(titleElement);
+
+    const authorElement = document.createElement('p');
+    authorElement.innerText = `By ${this.author}`;
+    bookElement.appendChild(authorElement);
+
+    // Add favorite button
+    const favoriteButton = document.createElement('button');
+    favoriteButton.innerText = this.isFavorite ? 'Unfavorite' : 'Favorite';
+    bookElement.appendChild(favoriteButton);
+
+    const commentsButton = document.createElement('button');
+    commentsButton.innerText = 'Comment';
+    bookElement.appendChild(commentsButton);
+
+    // Add comment form
+    const commentForm = document.createElement('form');
+    commentForm.classList.add('comment-form');
+    commentForm.style.display = 'none'; // Hide form by default
+    commentForm.innerHTML = `
+      <input type="text" placeholder="Leave a comment..." name="comment" maxlength="280" required>
+      <button type="submit">Send</button> `;
+
+    bookElement.appendChild(commentForm);
+
+    // Add comment list
+    const commentList = document.createElement('ul');
+    commentList.classList.add('comment-list');
+    this.comments.forEach((comment) => {
+      const listItem = document.createElement('li');
+      listItem.innerText = comment;
+      commentList.appendChild(listItem);
+    });
+
+    bookElement.appendChild(commentList);
+
+    return bookElement;
   }
-  // Define the Bookshelf class
-  class Bookshelf {
-  constructor() {
-  // Initialize an empty array to hold books
-  this.books = [];
+}
+
+// Create a new bookshelf instance and fill it with books from data
+const bookshelf = new Bookshelf();
+bookshelf.fillWithData(bookData);
+
+document.body.appendChild(bookshelf.render(bookshelf.books));
+
+// Create and update the favorite count DOM element
+const favoriteCountElement = document.createElement('p');
+updateFavoriteCountAndList();
+
+function updateFavoriteCountAndList() {
+ // Update favorite count
+ const favoriteCount = bookshelf.countFavorites();
+ favoriteCountElement.innerText = `Total Favorites: ${favoriteCount}`;
+
+ // Update list of favorite books
+ const existingFavoritesElement = document.querySelector('.favorites');
+ if (existingFavoritesElement) {
+   document.body.removeChild(existingFavoritesElement);
+ }
+ document.body.appendChild(bookshelf.renderFavorites());
+}
+
+// Add an eventlistener for the "Favorite" button
+function addFavoriteButtonListener(bookElement, book) {
+ const favoriteButton = bookElement.querySelector('button');
+ favoriteButton.addEventListener('click', () => {
+   book.toggleFavorite();
+   favoriteButton.innerText = book.isFavorite ? 'Unfavorite' : 'Favorite';
+   if (book.isFavorite) {
+     bookshelf.addFavorite(book);
+   } else {
+     bookshelf.removeFavorite(book);
+   }
+   updateFavoriteCountAndList();
+ });
+}
+
+document.body.addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON' && event.target.closest('.book') && (event.target.innerText === 'Favorite' || event.target.innerText === 'Unfavorite')) {
+    const bookElement = event.target.closest('.book');
+    const bookIndex = Array.from(bookElement.parentElement.children).indexOf(bookElement);
+    const book = bookshelf.books[bookIndex];
+    handleFavoriteButtonClick(bookElement, book);
   }
-  // Add a book to the bookshelf
-  addBook(book) {
-    // Add the book object to the array of books
-    this.books.push(book);
-  }
-  
-    // Render the bookshelf as a DOM element
-  render() {
-      // Create an unordered list element to represent the bookshelf
-      const bookshelfElement = document.createElement('ul');
-      // Add the 'bookshelf' class to the bookshelf element
-      bookshelfElement.classList.add('bookshelf');
-      
-      // Iterate over each book in the array of books
-      for (let i = 0; i < this.books.length; i++) {
-          const book = this.books[i];
-          // Render the book as a DOM element
-          const bookElement = book.render();
-          
-          // Create a list item element to hold the book
-          const liElement = document.createElement('li');
-          // Add the book element to the list item
-          liElement.appendChild(bookElement);
-          // Add the list item to the bookshelf
-          bookshelfElement.appendChild(liElement);
-      }
-  
-      // Return the bookshelf element
-      return bookshelfElement;
-  }
-  // Fill the bookshelf with books from data
-  fillWithData(data) {
-      // Iterate over each book data object in the array
-      for (let i = 0; i < data.length; i++) {
-          const bookData = data[i];
-          // Create a new Book object with the title and author from the book data
-          const book = new Book(bookData.title, bookData.author);
-          // Add the book to the bookshelf
-          this.addBook(book);
-      }
-  }
-  }
-  
-  // Create a new instance of the Bookshelf class
-  const bookshelf = new Bookshelf();
-  // Fill the bookshelf with books from the bookData array
-  bookshelf.fillWithData(bookData);
-  // Render the bookshelf as a DOM element and append it to the body of the document
-  document.body.appendChild(bookshelf.render());
+});
+
+// Append the favorite count element to the document body
+document.body.appendChild(favoriteCountElement);
+
